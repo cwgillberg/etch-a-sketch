@@ -3,6 +3,7 @@ const pen = document.querySelector(".pen-controls");
 const canvas = document.querySelector(".canvas");
 
 var brush = "black";
+var toggle = "";
 
 //loads the default grid when page loads
 window.addEventListener("load", () => {
@@ -26,8 +27,6 @@ canvas.addEventListener('click', (e) => {
     }
 });
 
-
-
 function loadGrid(height, width) {
     container.style.gridTemplateRows = `repeat(${height}, 1fr)`;
     container.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
@@ -35,10 +34,20 @@ function loadGrid(height, width) {
     for(let i = 0; i < (height*width); i++) {
         let item = document.createElement("div");
         item.className = "grid-item";
-        item.addEventListener("mouseover", (e) => {
-            setColor(item);
-            
+
+        item.addEventListener("mousedown", (e) => {
+            toggle = "on";            
+            toggleBrush(item);
         });
+
+        item.addEventListener("mouseover", (e) => {
+            toggleBrush(item);            
+        });
+        
+        item.addEventListener("mouseup", (e) => {
+            toggle = "off";            
+        });
+
         container.appendChild(item);
     }
 }
@@ -53,16 +62,18 @@ function setBrush(color) {
     }
 }
 
-
-function setColor(target) {
-    if(brush !== "rainbow") {
-        target.style.background = brush;
+function toggleBrush(target) {
+    if(toggle === "on") {
+        if(brush !== "rainbow") {
+            target.style.background = brush;
+        } else {
+            //the below HEX color generator is borrowed from: https://stackoverflow.com/a/5365036 
+            target.style.background = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+        }
     } else {
-        //the below HEX color generator is borrowed from: https://stackoverflow.com/a/5365036 
-        target.style.background = "#" + ((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0");
+        return;
     }
 }
-
 
 function reset() {
     let items = document.querySelectorAll(".grid-item").forEach(function(item) {
@@ -71,8 +82,12 @@ function reset() {
 }
 
 function newCanvas() {
-    let newSize = prompt("Enter size of new canvas: ");
-    loadGrid(newSize, newSize);
+    let newSize = prompt("Enter size of new canvas (max 100): ");
+    if(newSize <= 100) {
+        loadGrid(newSize, newSize);
+    } else {
+        alert("Sorry! You entered a value over 100, please try again");
+    }
 
 }
 

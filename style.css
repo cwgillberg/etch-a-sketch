@@ -17,6 +17,13 @@ body {
     width: 500px;
     height: 500px;
     background-color: white;
+    box-shadow: 5px 5px 5px lightgray;
+    /*prevents the canvas to be dragged when brushing, inspo: https://stackoverflow.com/a/12906840 */
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 
@@ -34,19 +41,20 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
-}
-
-.grid-item {
     
-
-}
-
-.grid-item:hover {
-    background-color: black;
 }
 
 /*buttons*/
 button {
     width: 60px;
     height: 40px;
+    background-color: lightgray;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 5px 5px 5px lightgray;
+
+}
+
+button:hover {
+    border: 2px solid black;
 }
